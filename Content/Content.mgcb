@@ -13,6 +13,13 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin fonts/font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/font.spritefont
+
 #begin images/canadabg.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -66,4 +73,7 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:Sounds/gunshot.mp3
+
+#begin X:/My Drive/Downloads/TNG_Title/TNG_Title.ttf
+/copy:X:/My Drive/Downloads/TNG_Title/TNG_Title.ttf;fonts/TNG_Title.ttf
 

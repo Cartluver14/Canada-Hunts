@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SharpDX.Direct2D1.Effects;
 using System;
 using System.Collections.Generic;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 
 namespace Canada_Hunts
 {
@@ -18,8 +20,15 @@ namespace Canada_Hunts
 
         Vector2 moosespeed= new Vector2 (2,0);
 
+        SoundEffect gunsound;
+        SpriteFont font;
 
-        
+        Double timer = 30;
+
+        int score = 0; 
+
+
+
 
 
         Random generator;
@@ -97,6 +106,7 @@ namespace Canada_Hunts
 
             }
 
+
             seconds = 0f;
             respawntime = 3f;
 
@@ -111,6 +121,12 @@ namespace Canada_Hunts
             canadabg = Content.Load<Texture2D>("Images/canadabg");
             gooseTexture = Content.Load<Texture2D>("Images/goose");
             mooseTexture = Content.Load<Texture2D>("Images/moose");
+            gunsound = Content.Load<SoundEffect>("Sounds/gunshot");
+             font = Content.Load<SpriteFont>("fonts/font");
+
+
+
+
 
 
             // TODO: use this.Content to load your game content here
@@ -160,7 +176,7 @@ namespace Canada_Hunts
             }
             if (mousestate.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton != ButtonState.Pressed)
             {
-
+                gunsound.Play();
                 Point mousepoint = new Point(mousestate.X, mousestate.Y);
 
                 // Looks for goose hit
@@ -169,8 +185,10 @@ namespace Canada_Hunts
                     if (gooserectangle[i].Contains(mousepoint))
                     {
                         gooserectangle.RemoveAt(i);
+                        score += 1;
                     }
                 }
+
 
 
                 // Loos for moose hit
@@ -185,15 +203,21 @@ namespace Canada_Hunts
                             mooserectangle.RemoveAt(i);
                             moosehealth.RemoveAt(i);
                             i--;
+                            score += 1;
                         }
                         
                     }
+                }
+                if (score>= 20)
+                {
+                    Exit();
                 }
 
 
 
 
             }
+
             Rectangle temp;
             for (int i = 0; i < gooserectangle.Count; i++)
             {
@@ -209,6 +233,17 @@ namespace Canada_Hunts
             }
 
             previousMouseState = mousestate;
+
+            
+                timer -= gameTime.ElapsedGameTime.TotalSeconds;
+                if (timer <= 0)
+                {
+                    Exit();
+            }
+
+
+
+
 
 
             // TODO: Add your update logic here
@@ -232,8 +267,11 @@ namespace Canada_Hunts
             mousePosition - new Vector2(scopeTexture.Width / 2, scopeTexture.Height / 2),
 
             Color.White
+
+           
            
         );
+            
             for (int i = 0; i < gooserectangle.Count; i++)
             {
                 _spriteBatch.Draw(gooseTexture, gooserectangle[i], Color.White);
@@ -244,6 +282,14 @@ namespace Canada_Hunts
                 _spriteBatch.Draw(mooseTexture, mooserectangle[i], Color.White);
 
             }
+
+            string timertext = $"Time Left: " + Math.Round(timer).ToString();
+            string scoretext = $"score: {score}";
+            _spriteBatch.DrawString(font, timertext, new Vector2(10, 10), Color.White);
+            _spriteBatch.DrawString(font, scoretext, new Vector2(10, 40), Color.White);
+
+
+
 
 
 
