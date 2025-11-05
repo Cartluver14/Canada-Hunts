@@ -16,16 +16,19 @@ namespace Canada_Hunts
         private SpriteBatch _spriteBatch;
         private Texture2D scopeTexture;
         private Vector2 mousePosition;
-        Vector2 goosespeed= new Vector2 (-2,0);
+        Vector2 goosespeed= new Vector2 (-4,0);
 
         Vector2 moosespeed= new Vector2 (2,0);
 
         SoundEffect gunsound;
         SpriteFont font;
 
-        Double timer = 30;
+        Double timer = 25;
 
         int score = 0; 
+
+        bool end = false;
+        bool win = false;
 
 
 
@@ -44,7 +47,7 @@ namespace Canada_Hunts
         List<Texture2D> goosetextures;
         Random random = new Random();
         Rectangle window;
-        Texture2D canadabg,gooseTexture,mooseTexture;
+        Texture2D canadabg, gooseTexture, mooseTexture, gameover, winscreen;
 
 
         float seconds;
@@ -108,7 +111,7 @@ namespace Canada_Hunts
 
 
             seconds = 0f;
-            respawntime = 3f;
+            respawntime = 2f;
 
             // TODO: Add your initialization logic here
 
@@ -123,6 +126,9 @@ namespace Canada_Hunts
             mooseTexture = Content.Load<Texture2D>("Images/moose");
             gunsound = Content.Load<SoundEffect>("Sounds/gunshot");
              font = Content.Load<SpriteFont>("fonts/font");
+            gameover = Content.Load<Texture2D>("Images/gameover");
+            winscreen = Content.Load<Texture2D>("Images/winscreen");
+
 
 
 
@@ -156,7 +162,7 @@ namespace Canada_Hunts
                      50
                      ));
 
-                for (int i = 1; i <= 2; i++)
+                for (int i = 1; i <= 1; i++)
                 {
                     mooserectangle.Add(new Rectangle(
                          generator.Next(-2000, -50),
@@ -179,7 +185,7 @@ namespace Canada_Hunts
                 gunsound.Play();
                 Point mousepoint = new Point(mousestate.X, mousestate.Y);
 
-                // Looks for goose hit
+               
                 for (int i = gooserectangle.Count - 1; i >= 0; i--)
                 {
                     if (gooserectangle[i].Contains(mousepoint))
@@ -191,7 +197,7 @@ namespace Canada_Hunts
 
 
 
-                // Loos for moose hit
+               
                 for (int i = 0; i < mooserectangle.Count ; i++)
                 {
                     if (mooserectangle[i].Contains(mousepoint))
@@ -203,14 +209,18 @@ namespace Canada_Hunts
                             mooserectangle.RemoveAt(i);
                             moosehealth.RemoveAt(i);
                             i--;
-                            score += 1;
+                            score += 2;
                         }
                         
                     }
+                    
+
                 }
-                if (score>= 20)
+                
+                if (score>= 60)
                 {
-                    Exit();
+                    win = true;
+                    seconds = 0f;
                 }
 
 
@@ -236,9 +246,11 @@ namespace Canada_Hunts
 
             
                 timer -= gameTime.ElapsedGameTime.TotalSeconds;
-                if (timer <= 0)
-                {
-                    Exit();
+                if (timer<0)
+
+            {
+                end = true;
+
             }
 
 
@@ -251,51 +263,50 @@ namespace Canada_Hunts
             base.Update(gameTime);
         }
 
+       
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin();
 
-           
-
-
             _spriteBatch.Draw(canadabg, window, Color.White);
 
             _spriteBatch.Draw(
-            scopeTexture,
-            
-            mousePosition - new Vector2(scopeTexture.Width / 2, scopeTexture.Height / 2),
+                scopeTexture,
+                mousePosition - new Vector2(scopeTexture.Width / 2, scopeTexture.Height / 2),
+                Color.White
+            );
 
-            Color.White
-
-           
-           
-        );
-            
             for (int i = 0; i < gooserectangle.Count; i++)
             {
                 _spriteBatch.Draw(gooseTexture, gooserectangle[i], Color.White);
-
             }
             for (int i = 0; i < mooserectangle.Count; i++)
             {
                 _spriteBatch.Draw(mooseTexture, mooserectangle[i], Color.White);
-
             }
 
-            string timertext = $"Time Left: " + Math.Round(timer).ToString();
-            string scoretext = $"score: {score}";
-            _spriteBatch.DrawString(font, timertext, new Vector2(10, 10), Color.White);
-            _spriteBatch.DrawString(font, scoretext, new Vector2(10, 40), Color.White);
+            if (end)
+            {
+                _spriteBatch.Draw(gameover, window, Color.White);
+            }
 
+            if (win)
+            {
+               
+                _spriteBatch.Draw(winscreen, window, Color.White);
 
-
-
-
-
-
-
-
+               
+            }
+            else
+            {
+                
+                string timertext = "Time Left: " + Math.Round(timer).ToString();
+                string scoretext = $"score: {score}";
+                _spriteBatch.DrawString(font, timertext, new Vector2(10, 10), Color.White);
+                _spriteBatch.DrawString(font, scoretext, new Vector2(10, 40), Color.White);
+                _spriteBatch.DrawString(font, "Shoot 60 animals to win!", new Vector2(300, 10), Color.White);
+            }
 
             // TODO: Add your drawing code here
 

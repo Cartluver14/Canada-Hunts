@@ -32,6 +32,18 @@
 /processorParam:TextureFormat=Color
 /build:images/canadabg.png
 
+#begin images/gameover.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/gameover.png
+
 #begin images/goose.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -67,6 +79,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:images/scope.png
+
+#begin images/winscreen.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:images/winscreen.png
 
 #begin Sounds/gunshot.mp3
 /importer:Mp3Importer
